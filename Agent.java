@@ -8,7 +8,7 @@ public abstract class Agent{
 	public int foodCount;
 	public int killCount;
 	public int steps;
-	public String strat;
+	public String currentStrat;
 	protected float pUP, pDOWN, pRIGHT, pLEFT;
 	
 	/**Constructor
@@ -27,6 +27,7 @@ public abstract class Agent{
 		this.coordinate = coordinate;
 		this.steps = 0;
 		this.killCount = 0;
+		this.currentStrat = "STOP";
 	}
 	
 	/**
@@ -67,7 +68,6 @@ public abstract class Agent{
 	 */
 	public void updateAgentPosition(String movement) {
 		if(skip) {
-			System.out.println("At Final");
 			return;
 		}
 		if(movement.equals("RIGHT")) {

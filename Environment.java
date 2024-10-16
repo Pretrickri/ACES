@@ -130,23 +130,17 @@ public class Environment {
 	
 	/**
 	 * Updates map with agents' new coordinates.
-	 * \n THERES A PROBLEM:
-	 * 		Essentially, the decision of movement from both the agent and the enemy should be done at the same time
-	 * 		in order to avoid preferences. How? Every agent (and enemy) should receive a global variable "currentStrat"
-	 * 		which holds the strategy per iteration. In the beginning of updateMap(), all agents (and enemies) will generate
-	 * 		a strat based on the current state of the map and only later they will update their positions simultaneously. 
-	 * 		Right now this is not a problem, but it will be problematic when the agents start reacting based on inputs from
-	 * 		their environment. OBS: the prediction and update agent position methods from the Agent class are NOT the problem
-	 * 		and should probably not need to be modified. Instead, the problem lies in the strategy, which has to be done before
-	 * 		and MAP modification. In other words, it is safer to create the strategy right in the beginning of the method.
 	 * 
 	 * @param agents -> List<Agent>
 	 */
 	public void updateMap() {
+		for(Agent a : this.agentList) a.currentStrat = a.strategy(this);
+		for(Agent e : this.enemyList) e.currentStrat = e.strategy(this);
+		
 		// ENEMY UPDATE
 		for(Agent e : this.enemyList) {
-			if(e.skip) {continue;}
-			String strat = e.strategy(this);
+			if(e.skip) { continue; }
+			String strat = e.currentStrat;
 			//System.out.println(strat); ////////////////////////////DEBUG
 			int[] tempPrediction = e.predictionAgentPosition(strat);
 			if(this.isObstacle(tempPrediction) || this.isEnemy(tempPrediction) || this.isFinal(tempPrediction)) {continue;}
@@ -176,7 +170,7 @@ public class Environment {
 				a.isDead = true;
 			}
 			
-			String strat = a.strategy(this);
+			String strat = a.currentStrat;
 			//System.out.println(strat); ////////////////////////////DEBUG
 			int[] tempPrediction = a.predictionAgentPosition(strat);
 			if(this.isObstacle(tempPrediction) || this.isAgent(tempPrediction)) { continue; }
