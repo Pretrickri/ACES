@@ -143,47 +143,40 @@ public class Environment {
 	 * @param agents -> List<Agent>
 	 */
 	public void updateMap() {
-		// ENEMY UPDATE
-		for(Agent e : this.enemyList) {
-			if(e.skip) {continue;}
-			String strat = e.strategy(this);
-			//System.out.println(strat); ////////////////////////////DEBUG
-			int[] tempPrediction = e.predictionAgentPosition(strat);
-			if(this.isObstacle(tempPrediction) || this.isEnemy(tempPrediction) || this.isFinal(tempPrediction)) {continue;}
-			this.substituteWith(e.coordinate, ' ');
-			
-			e.updateAgentPosition(strat);
-			// THESE IF AND ELSES UPDATE THE MAP
-			if(this.isFood(e.coordinate)) {
-				e.foodCount += 1;
-				this.substituteWith(e.coordinate, agentCode);
-			}
-			else if(this.isAgent(e.coordinate)) {
-				e.killCount += 1;
-				this.substituteWith(e.coordinate, enemyCode);
-			}
-			else {
-				this.substituteWith(e.coordinate, enemyCode);
-			}
-			
-		}
-		
-		// AGENT UPDATE
+///////////////////////POSITION UPDATES////////////////////////////
+		// AGENT POSITION UPDATE
 		for(Agent a : this.agentList) {
-			if(a.skip) { continue; }
-			if(this.isEnemy(a.coordinate)) { // in case the enemy ran into an agent.
-				a.skip = true;
-				a.isDead = true;
-			}
-			
+			if(a.skip) continue;
 			String strat = a.strategy(this);
-			//System.out.println(strat); ////////////////////////////DEBUG
-			int[] tempPrediction = a.predictionAgentPosition(strat);
-			if(this.isObstacle(tempPrediction) || this.isAgent(tempPrediction)) { continue; }
+			//System.out.println(currentStrat); ////////////////////////////DEBUG
+			int[] tempPrediction = a.predictionAgentPosition(strat); // Avoiding collisions
+			if(this.isObstacle(tempPrediction) || this.isAgent(tempPrediction)) 
+				continue;
 			this.substituteWith(a.coordinate, ' ');
 			
 			a.updateAgentPosition(strat);
-			// THESE IF AND ELSES UPDATE THE MAP
+		}
+		// ENEMY POSITION UPDATE
+		for(Agent e : this.enemyList) {
+			if(e.skip) continue;
+			String strat = e.strategy(this);
+			//System.out.println(currentStratstrat); ////////////////////////////DEBUG
+			int[] tempPrediction = e.predictionAgentPosition(strat); // Avoiding collisions
+			if(this.isObstacle(tempPrediction) || this.isEnemy(tempPrediction) || this.isFinal(tempPrediction))
+				continue;
+			this.substituteWith(e.coordinate, ' ');
+			
+			e.updateAgentPosition(strat);
+			
+		}
+		
+///////////////////////MAP UPDATE//////////////////////////////////
+// Gotta check if this new position is also not overlapping Agents with Agents or
+// Enemies with Enemies! This might be a bit hard because the agents and enemies
+// at this point probably already updated their positions. Perhaps create a "ghost
+// position" could be a nice fix?
+		for(Agent a : this.agentList) {
+			if(a.skip) continue;
 			if(this.isFinal(a.coordinate)) {
 				a.skip = true;
 				a.foundEnd = true;
@@ -200,6 +193,17 @@ public class Environment {
 			}
 			else {
 				this.substituteWith(a.coordinate, agentCode);
+			}
+		}
+		for(Agent e: this.enemyList) {
+			if(e.skip) continue;
+			// THESE IF AND ELSES UPDATE THE MAP
+			if(this.isFood(e.coordinate)) {
+				e.foodCount += 1;
+				this.substituteWith(e.coordinate, agentCode);
+			}
+			else {
+				this.substituteWith(e.coordinate, enemyCode);
 			}
 		}
 		
