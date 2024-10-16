@@ -148,25 +148,27 @@ public class Environment {
 		for(Agent a : this.agentList) {
 			if(a.skip) continue;
 			String strat = a.strategy(this);
+			a.currentStrat = strat;
 			//System.out.println(currentStrat); ////////////////////////////DEBUG
 			int[] tempPrediction = a.predictionAgentPosition(strat); // Avoiding collisions
 			if(this.isObstacle(tempPrediction) || this.isAgent(tempPrediction)) 
 				continue;
 			this.substituteWith(a.coordinate, ' ');
 			
-			a.updateAgentPosition(strat);
+			a.updateGhost(strat);
 		}
 		// ENEMY POSITION UPDATE
 		for(Agent e : this.enemyList) {
 			if(e.skip) continue;
 			String strat = e.strategy(this);
+			e.currentStrat = strat;
 			//System.out.println(currentStratstrat); ////////////////////////////DEBUG
 			int[] tempPrediction = e.predictionAgentPosition(strat); // Avoiding collisions
 			if(this.isObstacle(tempPrediction) || this.isEnemy(tempPrediction) || this.isFinal(tempPrediction))
 				continue;
 			this.substituteWith(e.coordinate, ' ');
 			
-			e.updateAgentPosition(strat);
+			e.updateGhost(strat);
 			
 		}
 		
@@ -177,32 +179,44 @@ public class Environment {
 // position" could be a nice fix?
 		for(Agent a : this.agentList) {
 			if(a.skip) continue;
-			if(this.isFinal(a.coordinate)) {
+			if(this.isFinal(a.ghostCoord)) {
+				a.updateAgentPosition(a.currentStrat);
 				a.skip = true;
 				a.foundEnd = true;
 			}
-			else if(this.isEnemy(a.coordinate)) { // in case the agent ran into an enemy lol
+			else if(this.isEnemy(a.ghostCoord)) { // in case the agent ran into an enemy lol
+				a.updateAgentPosition(a.currentStrat);
 				Agent enemy = (Agent) this.findObjectAt(a.coordinate); //This should be safe because of the isEnemy check!
 				enemy.killCount++;
 				a.skip = true;
 				a.isDead = true;
 			}
-			else if(this.isFood(a.coordinate)) {
+			else if(this.isAgent(a.ghostCoord)) {
+				this.substituteWith(a.coordinate, agentCode);
+			}
+			else if(this.isFood(a.ghostCoord)) {
+				a.updateAgentPosition(a.currentStrat);
 				a.foodCount += 1;
 				this.substituteWith(a.coordinate, agentCode);
 			}
 			else {
+				a.updateAgentPosition(a.currentStrat);
 				this.substituteWith(a.coordinate, agentCode);
 			}
 		}
 		for(Agent e: this.enemyList) {
 			if(e.skip) continue;
 			// THESE IF AND ELSES UPDATE THE MAP
-			if(this.isFood(e.coordinate)) {
+			if(this.isFood(e.ghostCoord)) {
+				e.updateAgentPosition(e.currentStrat);
 				e.foodCount += 1;
 				this.substituteWith(e.coordinate, agentCode);
 			}
+			else if(this.isEnemy(e.ghostCoord)) {
+				this.substituteWith(e.coordinate, enemyCode);
+			}
 			else {
+				e.updateAgentPosition(e.currentStrat);
 				this.substituteWith(e.coordinate, enemyCode);
 			}
 		}
