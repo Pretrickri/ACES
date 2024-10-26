@@ -1,8 +1,6 @@
-import java.util.Random;
 
 public abstract class Agent{
 	public int[] coordinate;
-	public int[] ghostCoord;
 	public boolean skip;
 	public boolean isDead;
 	public boolean foundEnd;
@@ -10,7 +8,7 @@ public abstract class Agent{
 	public int killCount;
 	public int steps;
 	public String currentStrat;
-	protected float pUP, pDOWN, pRIGHT, pLEFT;
+	protected float pUP, pDOWN, pRIGHT, pLEFT, pSTOP;
 	
 	/**Constructor
 	 * Simple constructor for the Agent class
@@ -26,7 +24,6 @@ public abstract class Agent{
 		this.isDead = false;
 		this.foundEnd = false;
 		this.coordinate = coordinate;
-		this.ghostCoord = coordinate.clone();
 		this.steps = 0;
 		this.killCount = 0;
 		this.currentStrat = "STOP";
@@ -46,7 +43,7 @@ public abstract class Agent{
 	 * @return -> int[] : size 2.
 	 */
 	public int[] predictionAgentPosition(String movement) {
-		if(skip) return this.coordinate.clone();
+		if(skip) { return this.coordinate.clone(); }
 		int[] returnCoordinate = this.coordinate.clone();
 		if(movement.equals("RIGHT")) {
 			returnCoordinate[1] += 1;
@@ -69,7 +66,9 @@ public abstract class Agent{
 	 * @param movement -> String
 	 */
 	public void updateAgentPosition(String movement) {
-		if(skip) return;
+		if(skip) {
+			return;
+		}
 		if(movement.equals("RIGHT")) {
 			this.coordinate[1] += 1;
 			this.steps++;
@@ -85,28 +84,6 @@ public abstract class Agent{
 		else if(movement.equals("DOWN")) {
 			this.coordinate[0] += 1;
 			this.steps++;
-		}
-		return;
-	}
-	
-	/**
-	 * Updates the position of the ghost of this agent.
-	 * @param movement -> String : "UP", "DOWN", "LEFT", "RIGHT", "STOP"
-	 */
-	public void updateGhost(String movement) {
-		if(skip) return;
-		int[] cloneCoordinate = this.coordinate.clone();
-		if(movement.equals("RIGHT")) {
-			this.ghostCoord[1] = cloneCoordinate[1]+1;
-		}
-		else if(movement.equals("LEFT")) {
-			this.ghostCoord[1] = cloneCoordinate[1]-1;
-		}
-		else if(movement.equals("UP")) {
-			this.ghostCoord[0] = cloneCoordinate[0]-1;
-		}
-		else if(movement.equals("DOWN")) {
-			this.ghostCoord[0] = cloneCoordinate[0]+1;
 		}
 		return;
 	}

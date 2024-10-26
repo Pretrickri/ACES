@@ -1,5 +1,5 @@
 OOOOOOOOOOOOOOOO
-O $      F      
+O $      F     O
 O              O
 O      O       O
 O     OOO      O

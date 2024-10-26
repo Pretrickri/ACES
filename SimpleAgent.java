@@ -13,6 +13,7 @@ public class SimpleAgent extends Agent{
 		pDOWN = prob[1];
 		pRIGHT = prob[2];
 		pLEFT = prob[3];
+		pSTOP = prob[4];
 	}
 
 	@Override

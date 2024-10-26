@@ -12,10 +12,10 @@ public class Manager {
 	}
 	
 	/**
-	 * Runs all the environments initiated in Manager.
+	 * Runs all the environments initiated in Manager, printing the environment at a certain delay as it goes.
 	 * @param waitTime -> int : amount of milliseconds between each iteration.
 	 */
-	public void run(int waitTime) {
+	public void timedRun(int waitTime) {
 		int i = 1;
 		for(Environment env : environments) {
 			System.out.println("\n///////////////////////\n "
@@ -35,6 +35,28 @@ public class Manager {
 					System.err.println("THREAD.SLEEP PROBLEM");
 					ie.printStackTrace();
 				}
+			}
+			env.printMap(); //Print Final Map
+			env.printAllAgents(); //Printing at the END
+			i++;
+		}
+	}
+	
+	public void run() {
+		int i = 1;
+		for(Environment env : environments) {
+			System.out.println("\n///////////////////////\n "
+					+ "Simulation " + i + ":");
+			List<Agent> agentList = new LinkedList<>(env.agentList);
+			while(!agentList.isEmpty()) {
+				env.printMap();
+				env.updateMap();
+
+				//env.printAllAgents(); // Printing for EACH iteration
+				
+				List<Agent> skippedAgents = env.findAgentsAtEnd();
+				for(Agent a : skippedAgents) { agentList.remove(a); } // This does not remove the agents from the environment!
+
 			}
 			env.printAllAgents(); //Printing at the END
 			i++;
