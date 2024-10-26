@@ -12,8 +12,8 @@ public class client {
 		
 		// Second Simulation
 		size = new int[] {9,16};
-		agentList.add(new SimpleAgent(new int[] {5,2}, new float[] {25,25,25,25}));
-		enemyList.add(new SimpleAgent(new int[] {5,9}, new float[] {25,25,25,25}));
+		agentList.add(new SimpleAgent(new int[] {5,2}, new float[] {20,20,20,20,20}));
+		enemyList.add(new SimpleAgent(new int[] {5,9}, new float[] {20,20,20,20,20}));
 		list.add(new Environment("C:\\Users\\patri\\OneDrive\\Área de Trabalho\\JavaProjects\\ACES\\src\\test9x16.txt",size, agentList, enemyList));
 		agentList.clear();
 		enemyList.clear();

@@ -1,4 +1,3 @@
-import java.util.Random;
 
 public abstract class Agent{
 	public int[] coordinate;
@@ -9,7 +8,7 @@ public abstract class Agent{
 	public int killCount;
 	public int steps;
 	public String currentStrat;
-	protected float pUP, pDOWN, pRIGHT, pLEFT;
+	protected float pUP, pDOWN, pRIGHT, pLEFT, pSTOP;
 	
 	/**Constructor
 	 * Simple constructor for the Agent class
