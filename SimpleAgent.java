@@ -5,7 +5,7 @@ public class SimpleAgent extends Agent{
 	/**
 	 * Constructor
 	 * @param coordinate -> int[] : size 2
-	 * @param probabilities -> float[] : [UP, DOWN, RIGHT, LEFT]
+	 * @param probabilities -> float[] : [UP, DOWN, RIGHT, LEFT, STOP]
 	 */
 	SimpleAgent(int[] coordinate, float[] prob) {
 		super(coordinate);
@@ -18,27 +18,7 @@ public class SimpleAgent extends Agent{
 
 	@Override
 	public String strategy(Environment env) {
-		Random randomObject = new Random();
-		float randomNumber = randomObject.nextFloat(100f);
-		float lowBound = 0f;
-		float highBound = pUP;
-		
-		// pUP
-		if(lowBound <= randomNumber && randomNumber < highBound) { return "UP"; }
-		lowBound = highBound;
-		highBound += pDOWN;
-		// pDOWN
-		if(lowBound <= randomNumber && randomNumber < highBound) { return "DOWN"; }
-		lowBound = highBound;
-		highBound += pRIGHT;
-		// pRIGHT
-		if(lowBound <= randomNumber && randomNumber < highBound) { return "RIGHT"; }
-		lowBound = highBound;
-		highBound += pLEFT;
-		// pLEFT
-		if(lowBound <= randomNumber && randomNumber < highBound) { return "LEFT"; }
-		
-		return "STOP";
+		return this.stratEvaluator();
 	}
 
 }

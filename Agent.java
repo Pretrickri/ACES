@@ -1,3 +1,4 @@
+import java.util.Random;
 
 public abstract class Agent{
 	public int[] coordinate;
@@ -13,7 +14,7 @@ public abstract class Agent{
 	/**Constructor
 	 * Simple constructor for the Agent class
 	 * @param coordinate -> int[] : only size 2!
-	 */
+	 */ 
 	Agent(int[] coordinate){
 		try{
 			if(coordinate.length != 2) { throw new IllegalArgumentException(); }
@@ -87,7 +88,34 @@ public abstract class Agent{
 		}
 		return;
 	}
-
+	
+	/**
+	 * Generates a random number that will be evaluated with the probabilities of this agent.
+	 * @return String
+	 */
+	protected String stratEvaluator() {
+		Random randomObject = new Random();
+		float randomNumber = randomObject.nextFloat(100f);
+		float lowBound = 0f;
+		float highBound = pUP;
+		
+		// pUP
+		if(lowBound <= randomNumber && randomNumber < highBound) { return "UP"; }
+		lowBound = highBound;
+		highBound += pDOWN;
+		// pDOWN
+		if(lowBound <= randomNumber && randomNumber < highBound) { return "DOWN"; }
+		lowBound = highBound;
+		highBound += pRIGHT;
+		// pRIGHT
+		if(lowBound <= randomNumber && randomNumber < highBound) { return "RIGHT"; }
+		lowBound = highBound;
+		highBound += pLEFT;
+		// pLEFT
+		if(lowBound <= randomNumber && randomNumber < highBound) { return "LEFT"; }
+		
+		return "STOP";
+	}
 
 	
 }

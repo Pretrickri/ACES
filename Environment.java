@@ -9,7 +9,7 @@ import java.util.List;
 public class Environment {
 	public List<Agent> agentList;
 	public List<Agent> enemyList;
-	private char[][] map;
+	public char[][] map;
 	private char agentCode;
 	private char foodCode;
 	private char obstacleCode;
